@@ -16,4 +16,10 @@ public class ApiExceptionHandler {
     public ResponseEntity<Map<String, Object>> validation(ValidationException ex) {
         return ResponseEntity.badRequest().body(Map.of("status", 400, "error", "bad_request", "message", ex.getMessage()));
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, Object>> forbidden(ForbiddenException ex) {
+        return ResponseEntity.status(403).body(Map.of("status", 403, "error", "forbidden", "message", ex.getMessage()));
+    }
+
 }

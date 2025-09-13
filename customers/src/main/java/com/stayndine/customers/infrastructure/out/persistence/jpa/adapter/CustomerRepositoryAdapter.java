@@ -2,6 +2,7 @@ package com.stayndine.customers.infrastructure.out.persistence.jpa.adapter;
 
 import com.stayndine.customers.application.port.out.CustomerRepository;
 import com.stayndine.customers.domain.model.Customer;
+import com.stayndine.customers.infrastructure.out.persistence.jpa.entity.CustomerEntity;
 import com.stayndine.customers.infrastructure.out.persistence.jpa.mapper.CustomerJpaMapper;
 import com.stayndine.customers.infrastructure.out.persistence.jpa.spring.CustomerJpa;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,6 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     private final CustomerJpaMapper mapper;
 
     @Override
-    public Customer save(Customer customer) {
-        var saved = jpa.save(mapper.toEntity(customer));
-        return mapper.toDomain(saved);
-    }
-
-    @Override
     public Optional<Customer> findById(UUID id) {
         return jpa.findById(id).map(mapper::toDomain);
     }
@@ -34,8 +29,19 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     }
 
     @Override
-    public Customer update(Customer customer) {
-        var saved = jpa.save(mapper.toEntity(customer));
-        return mapper.toDomain(saved);
+    public Optional<Customer> findByUserId(UUID userId) {
+        return jpa.findByUserId(userId).map(mapper::toDomain);
+    }
+
+    @Override
+    public void save(Customer c) {
+        CustomerEntity e = mapper.toEntity(c);
+        jpa.save(e);
+    }
+
+    @Override
+    public void update(Customer c) {
+        CustomerEntity e = mapper.toEntity(c);
+        jpa.save(e);
     }
 }

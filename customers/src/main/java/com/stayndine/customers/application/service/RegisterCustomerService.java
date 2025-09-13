@@ -14,25 +14,29 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class RegisterCustomerService implements RegisterCustomerUseCase {
-    private final CustomerRepository customerRepository;
+
+    private final CustomerRepository repo;
 
     @Override
     @Transactional
     public Customer handle(Command cmd) {
-        customerRepository.findByEmail(cmd.email()).ifPresent(c -> {
-            throw new ValidationException("email already registered");
+        repo.findByEmail(cmd.email()).ifPresent(c -> {
+            throw new ValidationException("email already exists");
         });
+
         var now = Instant.now();
         var c = new Customer(
                 UUID.randomUUID(),
-                cmd.email().trim().toLowerCase(),
-                cmd.firstName().trim(),
-                cmd.lastName().trim(),
+                cmd.userId(),
+                cmd.email(),
+                cmd.firstName(),
+                cmd.lastName(),
                 cmd.phone(),
                 cmd.birthDate(),
                 null,
                 now, now
         );
-        return customerRepository.save(c);
+        repo.save(c);
+        return c;
     }
 }

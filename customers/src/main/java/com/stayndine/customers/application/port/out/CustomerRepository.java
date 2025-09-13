@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerRepository {
-    Customer save(Customer customer);
-
     Optional<Customer> findById(UUID id);
 
     Optional<Customer> findByEmail(String email);
 
-    Customer update(Customer customer);
+    Optional<Customer> findByUserId(UUID userId);
+
+    void save(Customer customer);
+
+    void update(Customer customer);
 }

@@ -19,6 +19,10 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
 
+security:
+  jwt:
+    secret: "a1d8b7e0d2b34d3c8f6a9e0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0"
+
 management:
   endpoints:
     web:

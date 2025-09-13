@@ -13,24 +13,33 @@ import java.time.Instant;
 @Service
 @RequiredArgsConstructor
 public class UpdateCustomerProfileService implements UpdateCustomerProfileUseCase {
-    private final CustomerRepository customerRepository;
+
+    private final CustomerRepository repo;
 
     @Override
     @Transactional
     public Customer handle(Command cmd) {
-        var existing = customerRepository.findById(cmd.id())
+        var current = repo.findById(cmd.id())
                 .orElseThrow(() -> new ResourceNotFoundException("customer not found"));
+
         var updated = new Customer(
-                existing.id(),
-                existing.email(),
-                cmd.firstName().trim(),
-                cmd.lastName().trim(),
-                cmd.phone(),
+                current.id(),
+                current.userId(),
+                current.email(),
+                trim(cmd.firstName()),
+                trim(cmd.lastName()),
+                trim(cmd.phone()),
                 cmd.birthDate(),
                 cmd.preferencesJson(),
-                existing.createdAt(),
+                current.createdAt(),
                 Instant.now()
         );
-        return customerRepository.update(updated);
+
+        repo.update(updated);
+        return updated;
+    }
+
+    private String trim(String s) {
+        return s == null ? null : s.trim();
     }
 }
