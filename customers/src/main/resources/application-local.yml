@@ -17,3 +17,12 @@ logging:
     root: INFO
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+
+cors:
+  allowed-origins:
+    - "http://localhost:5173"
+    - "http://127.0.0.1:5173"
+  allowed-methods: [ GET, POST, PUT, PATCH, DELETE, OPTIONS ]
+  allowed-headers: [ Authorization, Content-Type, X-Requested-With ]
+  exposed-headers: [ Location ]
+  allow-credentials: false
